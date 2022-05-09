@@ -63,40 +63,48 @@ export default function Index() {
       <Container maxW="1400px">
         <Form method="get" ref={form}>
           <FormControl marginBottom="16px">
-            <Input id={queryKey} name={queryKey} defaultValue={query} />
+            <Flex align="center">
+              <Input
+                id={queryKey}
+                name={queryKey}
+                defaultValue={query}
+                placeholder="Крупа пшенична"
+              />
+              <Button marginLeft="10px" type="submit">
+                Пошук
+              </Button>
+            </Flex>
           </FormControl>
 
           <FormControl>
             {products.filters.map((filter) => {
               return (
-                filter.options && ( // TODO: options should be required
-                  <div key={filter.id}>
-                    {filter.name}:{' '}
-                    <Flex
-                      wrap="wrap"
-                      gap="10px"
-                      direction="row"
-                      marginBottom="20px"
-                      width="full"
-                    >
-                      {filter.options.map((option) => {
-                        return (
-                          <Switch
-                            key={option.id}
-                            name={filter.id}
-                            value={option.id}
-                            defaultChecked={filters[filter.id]?.includes(
-                              option.id
-                            )}
-                            onChange={submitForm}
-                          >
-                            {option.name}
-                          </Switch>
-                        )
-                      })}
-                    </Flex>
-                  </div>
-                )
+                <div key={filter.id}>
+                  {filter.name}:{' '}
+                  <Flex
+                    wrap="wrap"
+                    gap="10px"
+                    direction="row"
+                    marginBottom="20px"
+                    width="full"
+                  >
+                    {filter.options.map((option) => {
+                      return (
+                        <Switch
+                          key={option.id}
+                          name={filter.id}
+                          value={option.id}
+                          defaultChecked={filters[filter.id]?.includes(
+                            option.id
+                          )}
+                          onChange={submitForm}
+                        >
+                          {option.name}
+                        </Switch>
+                      )
+                    })}
+                  </Flex>
+                </div>
               )
             })}
           </FormControl>
@@ -109,8 +117,6 @@ export default function Index() {
               <option value="weight">За вагою</option>
             </Select>
           </FormControl>
-
-          <Button type="submit">Search</Button>
         </Form>
 
         <Box marginTop="20px">
