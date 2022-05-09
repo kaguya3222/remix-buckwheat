@@ -10,7 +10,7 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import type { LoaderFunction } from '@remix-run/node'
-import { Form, useLoaderData } from '@remix-run/react'
+import { Form, useLoaderData, useSubmit } from '@remix-run/react'
 import { useRef } from 'react'
 
 import type { Products } from '~/api'
@@ -28,6 +28,7 @@ interface LoaderData {
     producer: string[]
     store: string[]
   }
+  sortBy: SortOption
 }
 
 type SortOption = 'price' | 'pricePerKg' | 'title' | 'weight' // TODO: get from swagger ?
@@ -37,20 +38,25 @@ export const loader: LoaderFunction = async ({ request }) => {
   const query = url.searchParams.get(queryKey) ?? ''
   const producer = url.searchParams.getAll('producer')
   const store = url.searchParams.getAll('store')
-  const sortBy = url.searchParams.get('sortBy') as SortOption | null
+  const sortBy =
+    (url.searchParams.get('sortBy') as SortOption | null) ?? 'price'
   const fetchedProducts = await apiClient.products.searchUsingGet({
     query,
     producer: producer.filter(Boolean),
     store: store.filter(Boolean),
-    sortBy: sortBy ?? undefined,
+    sortBy,
   }) // TODO: filter object
   const products: Products = await fetchedProducts.json()
-  return { products, query, filters: { producer, store } }
+  return { products, query, filters: { producer, store }, sortBy }
 }
 
 export default function Index() {
-  const { products, query, filters } = useLoaderData<LoaderData>()
+  const { products, query, filters, sortBy } = useLoaderData<LoaderData>()
+  const submit = useSubmit()
   const form = useRef<HTMLFormElement>(null)
+  const submitForm = () => {
+    submit(form.current, { replace: true })
+  }
 
   return (
     <main>
@@ -82,6 +88,7 @@ export default function Index() {
                             defaultChecked={filters[filter.id]?.includes(
                               option.id
                             )}
+                            onChange={submitForm}
                           >
                             {option.name}
                           </Switch>
@@ -95,8 +102,7 @@ export default function Index() {
           </FormControl>
 
           <FormControl marginBottom="20px">
-            {/* TODO: set default value */}
-            <Select name="sortBy">
+            <Select name="sortBy" onChange={submitForm} defaultValue={sortBy}>
               <option value="price">За ціною</option>
               <option value="pricePerKg">За вагою</option>
               <option value="title">За назвою</option>
