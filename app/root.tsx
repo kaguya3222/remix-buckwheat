@@ -1,4 +1,4 @@
-import { Box, ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider, Progress } from '@chakra-ui/react'
 import { withEmotionCache } from '@emotion/react'
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import {
@@ -8,6 +8,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useTransition,
 } from '@remix-run/react'
 import React, { useContext, useEffect } from 'react'
 
@@ -79,9 +80,15 @@ const Document = withEmotionCache(
 )
 
 export default function App() {
+  const transition = useTransition()
+  const showProgress = transition.state === 'submitting'
+
   return (
     <Document>
       <ChakraProvider>
+        {showProgress && (
+          <Progress size="xs" isIndeterminate position="fixed" width="full" />
+        )}
         <Box marginBottom="40px">
           <Header />
         </Box>
