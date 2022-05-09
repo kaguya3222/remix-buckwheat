@@ -9,7 +9,7 @@ import {
   Select,
   Switch,
 } from '@chakra-ui/react'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Form, useLoaderData, useSubmit } from '@remix-run/react'
 import { useRef } from 'react'
 
@@ -51,6 +51,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
   const products: Products = await fetchedProducts.json()
   return { products, query, filters: { producer, store }, sortBy }
+}
+
+export const meta: MetaFunction = () => {
+  return {
+    title: 'Пошук',
+  }
 }
 
 export default function Index() {
