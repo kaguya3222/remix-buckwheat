@@ -20,6 +20,9 @@ import { ProductCard } from '~/components/ProductCard'
 const apiClient = new Api()
 
 const queryKey = 'query'
+const producerFilterKey = 'producer'
+const storeFilterKey = 'store'
+const sortByFilterKey = 'sortBy'
 
 interface LoaderData {
   products: Products
@@ -36,16 +39,16 @@ type SortOption = 'price' | 'pricePerKg' | 'title' | 'weight' // TODO: get from 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
   const query = url.searchParams.get(queryKey) ?? ''
-  const producer = url.searchParams.getAll('producer')
-  const store = url.searchParams.getAll('store')
+  const producer = url.searchParams.getAll(producerFilterKey)
+  const store = url.searchParams.getAll(storeFilterKey)
   const sortBy =
-    (url.searchParams.get('sortBy') as SortOption | null) ?? 'price'
+    (url.searchParams.get(sortByFilterKey) as SortOption | null) ?? 'price'
   const fetchedProducts = await apiClient.products.searchUsingGet({
     query,
-    producer: producer.filter(Boolean),
-    store: store.filter(Boolean),
+    producer,
+    store,
     sortBy,
-  }) // TODO: filter object
+  })
   const products: Products = await fetchedProducts.json()
   return { products, query, filters: { producer, store }, sortBy }
 }
