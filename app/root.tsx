@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider } from '@chakra-ui/react'
 import { withEmotionCache } from '@emotion/react'
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import {
@@ -82,7 +82,9 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
-        <Header />
+        <Box marginBottom="40px">
+          <Header />
+        </Box>
         <Outlet />
       </ChakraProvider>
     </Document>
