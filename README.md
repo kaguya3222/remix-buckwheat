@@ -1,4 +1,4 @@
-# Application for searching buckwheat in Ukrainian stores 🇺🇦 . Built with Remix.
+### Application for searching buckwheat in Ukrainian stores 🇺🇦 . Built with Remix.
 
 # Welcome to Remix!
 
