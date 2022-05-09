@@ -6,7 +6,9 @@ import type { Product } from '~/api'
 export const ProductCard: React.FC<Product> = ({ title, img, href }) => {
   return (
     <Box p={5} shadow="md" borderWidth="1px">
-      <Heading fontSize="xl">{title}</Heading>
+      <Heading fontSize="xl" marginBottom="10px">
+        {title}
+      </Heading>
       <Box as="a" boxSize="sm" href={href} target="_blank">
         <Image src={img} alt={title} />
       </Box>
