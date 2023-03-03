@@ -10,7 +10,7 @@ export const Header = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Text fontSize="3xl">Remix buckwheat</Text>
+      <Text fontSize="3xl">Remix buckwheat 123</Text>
     </Flex>
   )
 }
